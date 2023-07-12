@@ -112,44 +112,40 @@ export default {
       lock: false,
       group: [
         {
-          groupId: -1001221619597,
+          groupId: -1001588989706,
           name: "第一小隊",
         },
         {
-          groupId: -1001376339069,
+          groupId: -1001897923106,
           name: "第二小隊",
         },
         {
-          groupId: -1001461040548,
+          groupId: -1001989709878,
           name: "第三小隊",
         },
         {
-          groupId: -1001457570830,
+          groupId: -1001964001299,
           name: "第四小隊",
         },
         {
-          groupId: -1001345724637,
+          groupId: -1001915605809,
           name: "第五小隊",
         },
         {
-          groupId: -1001402246405,
+          groupId: -1001720858102,
           name: "第六小隊",
         },
         {
-          groupId: -1001380073416,
+          groupId: -1001984208872,
           name: "第七小隊",
         },
         {
-          groupId: -1001342649480,
+          groupId: -1001826501562,
           name: "第八小隊",
         },
         {
-          groupId: -1001387397358,
+          groupId: -1001967156783,
           name: "第九小隊",
-        },
-        {
-          groupId: -1001396420235,
-          name: "第十小隊",
         },
       ],
       problems: [],
