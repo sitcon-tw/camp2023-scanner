@@ -224,6 +224,7 @@ export default {
               self.lock = false;
             })
             .catch(function (error) {
+              alert(error.response.data.message);
               console.log(error.message);
               self.lock = false;
             });
