@@ -251,11 +251,6 @@ export default {
     },
     generate() {
       if ((this.parameters().token || "").length !== 0) {
-        let data = JSON.stringify({
-          token: this.parameters().token,
-          coin: this.point,
-          description: this.desc,
-        });
         this.api
           .post(
             "generate",
@@ -265,9 +260,9 @@ export default {
               description: this.desc,
             })
           )
-          .then(function (res) {
-            self.mode = "admin-finish";
-            self.coupon =
+          .then((res) => {
+            this.mode = "admin-finish";
+            this.coupon =
               "https://chart.googleapis.com/chart?cht=qr&chl=" +
               res.data.coupon +
               "&chs=300x300";
