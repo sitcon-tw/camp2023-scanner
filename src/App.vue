@@ -49,7 +49,7 @@
       <button type="submit" @click="generate">產生</button>
     </template>
     <template v-else-if="mode === 'admin-finish'">
-      <canvas id="qrcode" height="240" width="240"></canvas>
+      <img :src="coupon" />
       <p>
         <button @click="back">返回</button>
       </p>
@@ -259,25 +259,17 @@ export default {
         });
     },
     generate() {
-      var self = this;
       if ((this.parameters().token || "").length !== 0) {
-        this.api
-          .post(
-            "generate",
-            qs.stringify({
-              token: this.parameters().token,
-              coin: this.point,
-              description: this.desc,
-            })
-          )
-          .then(function (res) {
-            self.mode = "admin-finish";
-            self.coupon = res.data.coupon;
-            self.$nextTick(function () {
-              var canvas = document.getElementById("qrcode");
-              window.w69b.qr.encoding.drawOnCanvas(self.coupon, canvas);
-            });
-          });
+        let data = JSON.stringify({
+          token: this.parameters().token,
+          coin: this.point,
+          description: this.desc,
+        });
+        this.coupon =
+          "https://chart.googleapis.com/chart?cht=qr&chl=" +
+          data +
+          "&chs=300x300";
+        this.mode = "admin-finish";
       }
     },
     back() {
