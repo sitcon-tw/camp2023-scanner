@@ -4,9 +4,7 @@
       <p style="text-align: center" v-if="isAndroid">
         如果使用 Android，請點擊上面三個點 開啟於...
       </p>
-      <QrcodeStream @onDecode="OnSuccess" style="width: 200px; height: 200px" />
-      <QrcodeDropZone />
-      <QrcodeCapture />
+      <QrcodeStream @decode="OnSuccess" style="width: 400px; height: 400px" />
     </template>
     <template v-else-if="mode === 'admin'">
       <p style="text-align: center">{{ point >= 0 ? "獲得 " : "" }}分數：</p>
@@ -90,11 +88,7 @@
 </template>
 
 <script>
-import {
-  QrcodeStream,
-  QrcodeDropZone,
-  QrcodeCapture,
-} from "qrcode-reader-vue3";
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import axios from "axios";
 import qs from "qs";
 
