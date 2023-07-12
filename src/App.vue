@@ -255,11 +255,22 @@ export default {
           coin: this.point,
           description: this.desc,
         });
-        this.coupon =
-          "https://chart.googleapis.com/chart?cht=qr&chl=" +
-          data +
-          "&chs=300x300";
-        this.mode = "admin-finish";
+        this.api
+          .post(
+            "generate",
+            qs.stringify({
+              token: this.parameters().token,
+              coin: this.point,
+              description: this.desc,
+            })
+          )
+          .then(function (res) {
+            self.mode = "admin-finish";
+            self.coupon =
+              "https://chart.googleapis.com/chart?cht=qr&chl=" +
+              res.data.coupon +
+              "&chs=300x300";
+          });
       }
     },
     back() {
