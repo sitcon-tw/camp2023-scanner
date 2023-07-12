@@ -172,7 +172,7 @@ export default {
         1000
       );
     } else {
-      this.mode = "student";
+      this.mode = "dashboard";
       window.setInterval(
         function () {
           this.getStatus();
