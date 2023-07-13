@@ -1,90 +1,83 @@
 <template>
-  <div id="app">
-    <template v-if="mode === 'student'">
-      <p style="text-align: center" v-if="isAndroid">
-        如果使用 Android，請點擊上面三個點 開啟於...
-      </p>
-      <QrcodeStream :onDetect="OnSuccess" style="width: 400px; height: 400px" />
-    </template>
-    <template v-else-if="mode === 'admin'">
-      <p style="text-align: center">{{ point >= 0 ? "獲得 " : "" }}分數：</p>
-      <input
-        type="number"
-        max="1000"
-        min="-100000000"
-        step="100"
-        list="defaultNumbers"
-        style="
-          text-align: center;
-          width: 150px;
-          height: 150px;
-          font-size: 1.6rem;
-        "
-        v-model="point"
-      />
-      <datalist id="defaultNumbers">
-        <option value="1000"></option>
-        <option value="500"></option>
-        <option value="200"></option>
-        <option value="100"></option>
-        <option value="-100"></option>
-        <option value="-200"></option>
-        <option value="-500"></option>
-        <option value="-1000"></option>
-      </datalist>
-      <p>
-        <select v-model="description">
-          <option>認真參與活動，{{ point >= 0 ? "獲得 " : "" }}</option>
-          <option>勇敢探索攤位，{{ point >= 0 ? "獲得 " : "" }}</option>
-          <option>上課表現卓越，{{ point >= 0 ? "獲得 " : "" }}</option>
-          <option>無故鬧事，{{ point >= 0 ? "獲得 " : "" }}</option>
-          <option>自訂</option>
-        </select>
-      </p>
-      <p v-if="description == '自訂'">
-        <input type="text" v-model="custom" />{{ point >= 0 ? "獲得 " : "" }}
-      </p>
-      <button type="submit" @click="generate">產生</button>
-    </template>
-    <template v-else-if="mode === 'admin-finish'">
-      <img :src="coupon" />
-      <p>
-        <button @click="back">返回</button>
-      </p>
-    </template>
-    <template v-else-if="mode === 'god'">
-      <div style="margin: 0 auto">
-        <div style="display: inline-block; margin-right: 24px">
-          <p>解題狀況</p>
-          <table>
-            <tr v-for="(item, index) in problems" :key="'pro' + index">
-              <td>{{ "第" + (index + 1) + "題" }}</td>
-              <td></td>
-              <td>{{ item.solved_team.length }}</td>
-            </tr>
-          </table>
-        </div>
-        <div style="display: inline-block; margin-left: 24px">
-          <p>各組解題狀況</p>
-          <table style="margin: 0 auto">
-            <tr v-for="(value, key) in groupProblem" :key="key">
-              <td>{{ key }}</td>
-              <td></td>
-              <td>{{ value }}</td>
-            </tr>
-          </table>
-        </div>
+  <template v-if="mode === 'student'">
+    <p style="text-align: center" v-if="isAndroid">
+      如果使用 Android，請點擊上面三個點 開啟於...
+    </p>
+    <QrcodeStream :onDetect="OnSuccess" />
+  </template>
+  <template v-else-if="mode === 'admin'">
+    <p style="text-align: center">{{ point >= 0 ? "獲得 " : "" }}分數：</p>
+    <input
+      type="number"
+      max="1000"
+      min="-100000000"
+      step="100"
+      list="defaultNumbers"
+      style="text-align: center; width: 150px; height: 150px; font-size: 1.6rem"
+      v-model="point"
+    />
+    <datalist id="defaultNumbers">
+      <option value="1000"></option>
+      <option value="500"></option>
+      <option value="200"></option>
+      <option value="100"></option>
+      <option value="-100"></option>
+      <option value="-200"></option>
+      <option value="-500"></option>
+      <option value="-1000"></option>
+    </datalist>
+    <p>
+      <select v-model="description">
+        <option>認真參與活動，{{ point >= 0 ? "獲得 " : "" }}</option>
+        <option>勇敢探索攤位，{{ point >= 0 ? "獲得 " : "" }}</option>
+        <option>上課表現卓越，{{ point >= 0 ? "獲得 " : "" }}</option>
+        <option>無故鬧事，{{ point >= 0 ? "獲得 " : "" }}</option>
+        <option>自訂</option>
+      </select>
+    </p>
+    <p v-if="description == '自訂'">
+      <input type="text" v-model="custom" />{{ point >= 0 ? "獲得 " : "" }}
+    </p>
+    <button type="submit" @click="generate">產生</button>
+  </template>
+  <template v-else-if="mode === 'admin-finish'">
+    <img :src="coupon" />
+    <p>
+      <button @click="back">返回</button>
+    </p>
+  </template>
+  <template v-else-if="mode === 'god'">
+    <div style="margin: 0 auto">
+      <div style="display: inline-block; margin-right: 24px">
+        <p>解題狀況</p>
+        <table>
+          <tr v-for="(item, index) in problems" :key="'pro' + index">
+            <td>{{ "第" + (index + 1) + "題" }}</td>
+            <td></td>
+            <td>{{ item.solved_team.length }}</td>
+          </tr>
+        </table>
       </div>
-    </template>
-    <template v-else>
-      <table style="margin: 0 auto">
-        <tr v-for="item in status" :key="item['group_id']">
-          <td>{{ item.name }}</td>
-          <td>{{ item.coin }}</td>
-        </tr>
-      </table>
-    </template>
-  </div>
+      <div style="display: inline-block; margin-left: 24px">
+        <p>各組解題狀況</p>
+        <table style="margin: 0 auto">
+          <tr v-for="(value, key) in groupProblem" :key="key">
+            <td>{{ key }}</td>
+            <td></td>
+            <td>{{ value }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </template>
+  <template v-else>
+    <table style="margin: 0 auto">
+      <tr v-for="item in status" :key="item['group_id']">
+        <td>{{ item.name }}</td>
+        <td>{{ item.coin }}</td>
+      </tr>
+    </table>
+  </template>
 </template>
 
 <script>
@@ -172,7 +165,7 @@ export default {
         1000
       );
     } else {
-      this.mode = "dashboard";
+      this.mode = "student";
       window.setInterval(
         function () {
           this.getStatus();
@@ -304,5 +297,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.qrcode-stream-wrapper {
+  width: min(90vw, 90vh);
+  max-width: 512px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2), 0 0 32px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  position: relative;
+  .qrcode-stream-camera {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 </style>
