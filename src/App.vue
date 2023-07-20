@@ -220,7 +220,7 @@ export default {
             .catch(function (error) {
               // alert(error.response.data.message);
               self.hasAlert = true;
-              self.alertMsg = "⚠️ 發生錯誤。<br />" + error.response.data.message;
+              self.alertMsg = "⚠️ 發生錯誤。 ➡️ " + error.response.data.message;
               console.log(error.message);
               self.lock = false;
             });
