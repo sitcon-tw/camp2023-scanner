@@ -3,7 +3,7 @@
     <p style="text-align: center" v-if="isAndroid">
       如果使用 Android，請點擊上面三個點 開啟於...
     </p>
-    <p style="text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 10px 5px; background-color: #77B55A;"
+    <p style="text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 10px 5px; background-color: #77B55A; color: white;"
       v-if="hasAlert">
       {{ alertMsg }}
     </p>
@@ -214,13 +214,13 @@ export default {
             .then(function (res) {
               // alert(res.data.status);
               self.hasAlert = true;
-              self.alertMsg = "✅ " + res.data.status
+              self.alertMsg = "✅ " + res.data.status == "OK" ? "執行成功，可以關閉 ATM 惹。" : res.data.status;
               self.lock = false;
             })
             .catch(function (error) {
               // alert(error.response.data.message);
               self.hasAlert = true;
-              self.alertMsg = "⚠️ " + error.response.data.message;
+              self.alertMsg = "⚠️ 發生錯誤。<br />" + error.response.data.message;
               console.log(error.message);
               self.lock = false;
             });
