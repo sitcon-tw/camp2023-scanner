@@ -35,7 +35,7 @@
         <option>自訂</option>
       </select>
     </p>
-    <p v-if="description == '自訂'">
+    <p v-if="description === '自訂'">
       <input type="text" v-model="custom" />{{ point >= 0 ? "獲得 " : "" }}
     </p>
     <button type="submit" @click="generate">產生</button>
@@ -165,7 +165,7 @@ export default {
         1000
       );
     } else {
-      this.mode = "student";
+      this.mode = "dashboard";
       window.setInterval(
         function () {
           this.getStatus();
