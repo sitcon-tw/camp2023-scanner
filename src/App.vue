@@ -3,19 +3,16 @@
     <p style="text-align: center" v-if="isAndroid">
       如果使用 Android，請點擊上面三個點 開啟於...
     </p>
+    <p style="text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 10px 5px; background-color: #77B55A;"
+      v-if="hasAlert">
+      {{ alertMsg }}
+    </p>
     <QrcodeStream :onDetect="OnSuccess" />
   </template>
   <template v-else-if="mode === 'admin'">
     <p style="text-align: center">{{ point >= 0 ? "獲得 " : "" }}分數：</p>
-    <input
-      type="number"
-      max="1000"
-      min="-100000000"
-      step="100"
-      list="defaultNumbers"
-      style="text-align: center; width: 150px; height: 150px; font-size: 1.6rem"
-      v-model="point"
-    />
+    <input type="number" max="1000" min="-100000000" step="100" list="defaultNumbers"
+      style="text-align: center; width: 150px; height: 150px; font-size: 1.6rem" v-model="point" />
     <datalist id="defaultNumbers">
       <option value="1000"></option>
       <option value="500"></option>
@@ -51,7 +48,7 @@
       <div style="display: inline-block; margin-right: 24px">
         <p>解題狀況</p>
         <table>
-          <tr v-for="(item, index) in problems" :key="'pro' + index">
+          <tr v-for="( item, index ) in  problems " :key="'pro' + index">
             <td>{{ "第" + (index + 1) + "題" }}</td>
             <td></td>
             <td>{{ item.solved_team.length }}</td>
@@ -61,7 +58,7 @@
       <div style="display: inline-block; margin-left: 24px">
         <p>各組解題狀況</p>
         <table style="margin: 0 auto">
-          <tr v-for="(value, key) in groupProblem" :key="key">
+          <tr v-for="( value, key ) in  groupProblem " :key="key">
             <td>{{ key }}</td>
             <td></td>
             <td>{{ value }}</td>
@@ -72,7 +69,7 @@
   </template>
   <template v-else>
     <table style="margin: 0 auto">
-      <tr v-for="item in status" :key="item['group_id']">
+      <tr v-for=" item  in  status " :key="item['group_id']">
         <td>{{ item.name }}</td>
         <td>{{ item.coin }}</td>
       </tr>
@@ -103,6 +100,8 @@ export default {
       coupon: "",
       status: [],
       lock: false,
+      hasAlert: false,
+      alertMsg: "",
       group: [
         {
           groupId: -1001588989706,
@@ -213,11 +212,15 @@ export default {
               qs.stringify({ group_id: this.parameters().id, coupon: result })
             )
             .then(function (res) {
-              alert(res.data.status);
+              // alert(res.data.status);
+              self.hasAlert = true;
+              self.alertMsg = "✅ " + res.data.status
               self.lock = false;
             })
             .catch(function (error) {
-              alert(error.response.data.message);
+              // alert(error.response.data.message);
+              self.hasAlert = true;
+              self.alertMsg = "⚠️ " + error.response.data.message;
               console.log(error.message);
               self.lock = false;
             });
@@ -298,6 +301,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
 .qrcode-stream-wrapper {
   width: min(90vw, 90vh);
   max-width: 512px;
@@ -311,6 +315,7 @@ export default {
     100px 100px 80px rgba(0, 0, 0, 0.07);
   border-radius: 16px;
   position: relative;
+
   .qrcode-stream-camera {
     width: 100%;
     height: 100%;
