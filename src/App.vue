@@ -52,7 +52,7 @@
         <p>解題狀況</p>
         <table>
           <tr v-for="(item, index) in problems" :key="'pro' + index">
-            <td>{{ "第" + (index + 1) + "題" }}</td>
+            <td>{{ "第 " + (index + 1) + " 題：" + item.keyword }}</td>
             <td></td>
             <td>{{ item.solved_team.length }}</td>
           </tr>
