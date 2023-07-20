@@ -32,7 +32,7 @@
         <option>自訂</option>
       </select>
     </p>
-    <p v-if="description == '自訂'">
+    <p v-if="description === '自訂'">
       <input type="text" v-model="custom" />{{ point >= 0 ? "獲得 " : "" }}
     </p>
     <button type="submit" @click="generate">產生</button>
@@ -49,7 +49,7 @@
         <p>解題狀況</p>
         <table>
           <tr v-for="( item, index ) in  problems " :key="'pro' + index">
-            <td>{{ "第" + (index + 1) + "題" }}</td>
+            <td>{{ "第 " + (index + 1) + " 題" + (item.keyword ? "： " + item.keyword : "") }}</td>
             <td></td>
             <td>{{ item.solved_team.length }}</td>
           </tr>
@@ -164,7 +164,7 @@ export default {
         1000
       );
     } else {
-      this.mode = "student";
+      this.mode = "dashboard";
       window.setInterval(
         function () {
           this.getStatus();
@@ -271,13 +271,13 @@ export default {
     },
     getStatus() {
       var self = this;
-      this.api.get("status").then(function (res) {
+      this.api.get("status", { params: { staff_token: this.parameters().staff_token } }).then(function (res) {
         self.status = res.data;
       });
     },
     getProblem() {
       var self = this;
-      this.api.get("keyword_status").then(function (res) {
+      this.api.get("keyword_status", { params: { staff_token: this.parameters().staff_token } }).then(function (res) {
         self.problems = res.data;
       });
     },
