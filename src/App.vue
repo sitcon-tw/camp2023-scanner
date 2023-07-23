@@ -70,7 +70,7 @@
   </template>
   <template v-else-if="mode === 'score-finish'">
     <div>
-      <div v-if="staff_token != undefined">
+      <div v-if="status.length > 0">
         <table
           style="margin: 0 auto; text-align: center; padding: 15px 30px; border-radius: 15px; background-color: #77B55A; color: white;">
           <thead>
