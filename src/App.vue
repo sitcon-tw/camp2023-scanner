@@ -232,13 +232,11 @@ export default {
               qs.stringify({ group_id: this.parameters().id, coupon: result })
             )
             .then(function (res) {
-              // alert(res.data.status);
               self.hasAlert = true;
               self.alertMsg = "✅ " + (res.data.status == "OK" ? "執行成功，可以關閉 ATM 惹。" : res.data.status);
               self.lock = false;
             })
             .catch(function (error) {
-              // alert(error.response.data.message);
               self.hasAlert = true;
               self.alertMsg = "⚠️ 發生錯誤。 ➡️ " + error.response.data.message;
               console.log(error.message);
