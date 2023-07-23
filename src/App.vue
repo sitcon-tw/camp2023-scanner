@@ -67,13 +67,32 @@
       </div>
     </div>
   </template>
+  <template v-else-if="mode === 'score-finish'">
+    <div>
+      <div v-if="staff_token != undefined">
+        <table
+          style="margin: 0 auto; text-align: center; padding: 15px 30px; border-radius: 15px; background-color: #77B55A; color: white;">
+          <thead>
+            <th>組別</th>
+            <th>分數</th>
+          </thead>
+          <tr v-for=" item  in  status " :key="item['group_id']">
+            <td>{{ item.name }}</td>
+            <td>{{ item.coin }}</td>
+          </tr>
+        </table>
+      </div>
+      <div v-else="staff_token == undefined || staff_token == ''" style=" text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 15px 30px;
+    background-color: #77B55A; color: white;">
+        ⚠️ No permission.
+      </div>
+    </div>
+  </template>
   <template v-else>
-    <table style="margin: 0 auto">
-      <tr v-for=" item  in  status " :key="item['group_id']">
-        <td>{{ item.name }}</td>
-        <td>{{ item.coin }}</td>
-      </tr>
-    </table>
+    <div v-if="staff_token == null" style=" text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 15px 30px;
+    background-color: #77B55A; color: white;">
+      Loading...
+    </div>
   </template>
 </template>
 
@@ -102,6 +121,7 @@ export default {
       lock: false,
       hasAlert: false,
       alertMsg: "",
+      staff_token: null,
       group: [
         {
           groupId: -1001588989706,
@@ -271,9 +291,13 @@ export default {
     },
     getStatus() {
       var self = this;
+      console.log(self.staff_token)
+      self.staff_token = this.parameters().staff_token;
+      console.log(self.staff_token)
+
       this.api.get("status", { params: { staff_token: this.parameters().staff_token } }).then(function (res) {
         self.status = res.data;
-      });
+      }).then(this.mode = "score-finish");
     },
     getProblem() {
       var self = this;
