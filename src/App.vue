@@ -46,22 +46,23 @@
   <template v-else-if="mode === 'god'">
     <div style="margin: 0 auto">
       <div style="display: inline-block; margin-right: 24px">
-        <p>解題狀況</p>
+        <p>👀 解題狀況</p>
         <table>
           <tr v-for="( item, index ) in  problems " :key="'pro' + index">
-            <td>{{ "第 " + (index + 1) + " 題" + (item.keyword ? "： " + item.keyword : "") }}</td>
+            <td>{{ "第 " + (index + 1) + " 題" }}</td>
             <td></td>
-            <td>{{ item.solved_team.length }}</td>
+            <td align="left"><code>{{ (item.keyword ? item.keyword : "") }}</code></td>
+            <td>{{ item.solved_team.length }} 組</td>
           </tr>
         </table>
       </div>
       <div style="display: inline-block; margin-left: 24px">
-        <p>各組解題狀況</p>
+        <p>🔍 各組解題狀況</p>
         <table style="margin: 0 auto">
           <tr v-for="( value, key ) in  groupProblem " :key="key">
             <td>{{ key }}</td>
-            <td></td>
-            <td>{{ value }}</td>
+            <td width="20" align="right"></td>
+            <td>{{ value }} 題</td>
           </tr>
         </table>
       </div>
