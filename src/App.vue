@@ -279,9 +279,8 @@ export default {
           .then((res) => {
             this.mode = "admin-finish";
             this.coupon =
-              "https://chart.googleapis.com/chart?cht=qr&chl=" +
-              res.data.coupon +
-              "&chs=300x300";
+              "https://quickchart.io/qr?text=" +
+              res.data.coupon
           });
       }
     },
