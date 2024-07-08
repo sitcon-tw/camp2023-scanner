@@ -234,7 +234,7 @@ export default {
             )
             .then(function (res) {
               self.hasAlert = true;
-              self.alertMsg = "✅ " + (res.data.status == "OK" ? "執行成功，可以關閉 ATM 惹。" : res.data.status);
+              self.alertMsg = "✅ " + (res.data.status == "OK" ? "執行成功，可以關閉掃描器惹。" : res.data.status);
               self.lock = false;
             })
             .catch(function (error) {
