@@ -3,55 +3,103 @@
     <p style="text-align: center" v-if="isAndroid">
       如果使用 Android，請點擊上面三個點 開啟於...
     </p>
-    <p style="text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 10px 5px; background-color: #77B55A; color: white;"
-      v-if="hasAlert">
+    <p
+      style="
+        text-align: center;
+        border: solid #69a14f 1px;
+        border-radius: 5px;
+        padding: 10px 5px;
+        background-color: #77b55a;
+        color: white;
+      "
+      v-if="hasAlert"
+    >
       {{ alertMsg }}
     </p>
     <QrcodeStream :onDetect="OnSuccess" />
   </template>
   <template v-else-if="mode === 'admin'">
-    <p style="text-align: center">{{ point >= 0 ? "獲得 " : "" }}分數：</p>
-    <input type="number" max="1000" min="-100000000" step="100" list="defaultNumbers"
-      style="text-align: center; width: 150px; height: 150px; font-size: 1.6rem" v-model="point" />
-    <datalist id="defaultNumbers">
-      <option value="1000"></option>
-      <option value="500"></option>
-      <option value="200"></option>
-      <option value="100"></option>
-      <option value="-100"></option>
-      <option value="-200"></option>
-      <option value="-500"></option>
-      <option value="-1000"></option>
-    </datalist>
-    <p>
-      <select v-model="description">
-        <option>認真參與活動，{{ point >= 0 ? "獲得 " : "" }}</option>
-        <option>勇敢探索攤位，{{ point >= 0 ? "獲得 " : "" }}</option>
-        <option>上課表現卓越，{{ point >= 0 ? "獲得 " : "" }}</option>
-        <option>無故鬧事，{{ point >= 0 ? "獲得 " : "" }}</option>
-        <option>自訂</option>
-      </select>
-    </p>
-    <p v-if="description === '自訂'">
-      <input type="text" v-model="custom" />{{ point >= 0 ? "獲得 " : "" }}
-    </p>
-    <button type="submit" @click="generate">產生</button>
+    <h1 class="title">點數 QRCode 生成</h1>
+    <div class="form">
+      <div class="reason">
+        <span class="reason-title">原因</span>
+        <select v-model="description" class="reason-selection">
+          <option value="" selected disabled>請選擇</option>
+          <option>認真參與活動</option>
+          <option>勇敢探索攤位</option>
+          <option>上課表現卓越</option>
+          <option>主動協助活動</option>
+          <option>完成每日任務</option>
+          <option>完成營期任務</option>
+          <option>無故鬧事</option>
+          <option>自訂</option>
+        </select>
+        <input
+          type="text"
+          v-model="custom"
+          class="reason-custom"
+          v-if="description === '自訂'"
+        />
+      </div>
+
+      <div class="money">
+        <span class="money-title">增減</span>
+        <select v-model="upDown" class="money-selection">
+          <option>獲得</option>
+          <option>扣除</option>
+        </select>
+      </div>
+
+      <div class="money">
+        <span class="money-title">金額</span>
+        <select v-model="point" class="money-selection">
+          <option selected disabled>0</option>
+          <option>1</option>
+          <option>5</option>
+          <option>10</option>
+          <option>50</option>
+          <option>100</option>
+          <option>200</option>
+          <option>500</option>
+          <option>1000</option>
+          <option>2000</option>
+        </select>
+      </div>
+    </div>
+    <h3 class="content">
+      {{
+        description === "自訂"
+          ? custom
+          : description === ""
+          ? "未知原因"
+          : description
+      }}，{{ upDown }} {{ point }} 拉麵靈魂
+    </h3>
+
+    <button type="submit" @click="generate" class="submit-btn">
+      <p class="submit-content">產生 QRCode</p>
+    </button>
   </template>
   <template v-else-if="mode === 'admin-finish'">
+    <h1 class="title">點數 QRCode 生成</h1>
     <img :src="coupon" />
-    <p>
-      <button @click="back">返回</button>
-    </p>
+    <div class="back-div">
+      <button @click="back" class="back-btn">
+        <p class="back-content">返回</p>
+      </button>
+    </div>
   </template>
   <template v-else-if="mode === 'god'">
     <div style="margin: 0 auto">
       <div style="display: inline-block; margin-right: 24px">
         <p>👀 解題狀況</p>
         <table>
-          <tr v-for="( item, index ) in  problems " :key="'pro' + index">
+          <tr v-for="(item, index) in problems" :key="'pro' + index">
             <td>{{ "第 " + (index + 1) + " 題" }}</td>
             <td></td>
-            <td align="left"><code>{{ (item.keyword ? item.keyword : "") }}</code></td>
+            <td align="left">
+              <code>{{ item.keyword ? item.keyword : "" }}</code>
+            </td>
             <td>{{ item.solved_team.length }} 組</td>
           </tr>
         </table>
@@ -59,7 +107,7 @@
       <div style="display: inline-block; margin-left: 24px">
         <p>🔍 各組解題狀況</p>
         <table style="margin: 0 auto">
-          <tr v-for="( value, key ) in  groupProblem " :key="key">
+          <tr v-for="(value, key) in groupProblem" :key="key">
             <td>{{ key }}</td>
             <td width="20" align="right"></td>
             <td>{{ value }} 題</td>
@@ -72,26 +120,52 @@
     <div>
       <div v-if="status.length > 0">
         <table
-          style="margin: 0 auto; text-align: center; padding: 15px 30px; border-radius: 15px; background-color: #77B55A; color: white;">
+          style="
+            margin: 0 auto;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 15px;
+            background-color: #77b55a;
+            color: white;
+          "
+        >
           <thead>
             <th>組別</th>
             <th>分數</th>
           </thead>
-          <tr v-for=" item  in  status " :key="item['group_id']">
+          <tr v-for="item in status" :key="item['group_id']">
             <td>{{ item.name }}</td>
             <td>{{ item.coin }}</td>
           </tr>
         </table>
       </div>
-      <div v-else="staff_token == undefined || staff_token == ''" style=" text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 15px 30px;
-    background-color: #77B55A; color: white;">
+      <div
+        v-else="staff_token == undefined || staff_token == ''"
+        style="
+          text-align: center;
+          border: solid #69a14f 1px;
+          border-radius: 5px;
+          padding: 15px 30px;
+          background-color: #77b55a;
+          color: white;
+        "
+      >
         ⚠️ No permission.
       </div>
     </div>
   </template>
   <template v-else>
-    <div v-if="staff_token == null" style=" text-align: center; border: solid #69a14f 1px; border-radius: 5px; padding: 15px 30px;
-    background-color: #77B55A; color: white;">
+    <div
+      v-if="staff_token == null"
+      style="
+        text-align: center;
+        border: solid #69a14f 1px;
+        border-radius: 5px;
+        padding: 15px 30px;
+        background-color: #77b55a;
+        color: white;
+      "
+    >
       Loading...
     </div>
   </template>
@@ -116,6 +190,7 @@ export default {
       api: null,
       point: 0,
       description: "",
+      upDown: "獲得",
       custom: "",
       coupon: "",
       status: [],
@@ -196,10 +271,12 @@ export default {
   },
   computed: {
     desc: function () {
-      if (this.description !== "自訂") {
-        return this.description;
+      if (this.description === "") {
+        return "未知原因" + "，" + this.upDown;
+      } else if (this.description !== "自訂") {
+        return this.description + "，" + this.upDown;
       } else {
-        return this.custom + (this.point >= 0 ? "獲得 " : " ");
+        return this.custom + "，" + this.upDown;
       }
     },
     groupProblem: function () {
@@ -234,7 +311,11 @@ export default {
             )
             .then(function (res) {
               self.hasAlert = true;
-              self.alertMsg = "✅ " + (res.data.status == "OK" ? "執行成功，可以關閉掃描器惹。" : res.data.status);
+              self.alertMsg =
+                "✅ " +
+                (res.data.status == "OK"
+                  ? "執行成功，可以關閉掃描器惹。"
+                  : res.data.status);
               self.lock = false;
             })
             .catch(function (error) {
@@ -278,9 +359,7 @@ export default {
           )
           .then((res) => {
             this.mode = "admin-finish";
-            this.coupon =
-              "https://quickchart.io/qr?text=" +
-              res.data.coupon
+            this.coupon = "https://quickchart.io/qr?text=" + res.data.coupon;
           });
       }
     },
@@ -289,19 +368,28 @@ export default {
     },
     getStatus() {
       var self = this;
-      console.log(self.staff_token)
+      console.log(self.staff_token);
       self.staff_token = this.parameters().staff_token;
-      console.log(self.staff_token)
+      console.log(self.staff_token);
 
-      this.api.get("status", { params: { staff_token: this.parameters().staff_token } }).then(function (res) {
-        self.status = res.data;
-      }).then(this.mode = "score-finish");
+      this.api
+        .get("status", {
+          params: { staff_token: this.parameters().staff_token },
+        })
+        .then(function (res) {
+          self.status = res.data;
+        })
+        .then((this.mode = "score-finish"));
     },
     getProblem() {
       var self = this;
-      this.api.get("keyword_status", { params: { staff_token: this.parameters().staff_token } }).then(function (res) {
-        self.problems = res.data;
-      });
+      this.api
+        .get("keyword_status", {
+          params: { staff_token: this.parameters().staff_token },
+        })
+        .then(function (res) {
+          self.problems = res.data;
+        });
     },
     id2GroupName(id) {
       var result = this.group.filter(function (element) {
