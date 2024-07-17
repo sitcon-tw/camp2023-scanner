@@ -93,7 +93,9 @@
   </template>
   <template v-else-if="mode === 'admin-finish'">
     <h1 class="title">點數 QRCode 生成</h1>
-    <img :src="coupon" />
+    <div v-for="(item, index) in coupon" :key="index">
+      <img :src="item" alt="QR Code" />
+    </div>
     <div class="back-div">
       <button @click="back" class="back-btn">
         <p class="back-content">返回</p>
@@ -152,7 +154,7 @@
         <CoinTrendChart :staff_token="staff_token" />
       </div>
       <div
-        v-else="staff_token == undefined || staff_token == ''"
+        v-else
         style="
           text-align: center;
           border: solid #69a14f 1px;
@@ -168,6 +170,105 @@
       </div>
     </div>
   </template>
+  <template v-else-if="mode === 'multi'">
+    <h1 class="title">點數 QRCode 生成</h1>
+    <div class="form">
+      <div class="reason">
+        <span class="reason-title">原因</span>
+        <select v-model="description" class="reason-selection">
+          <option value="" selected disabled>請選擇</option>
+          <option>認真參與活動</option>
+          <option>勇敢探索攤位</option>
+          <option>上課表現卓越</option>
+          <option>主動協助活動</option>
+          <option>完成每日任務</option>
+          <option>完成營期任務</option>
+          <option>無故鬧事</option>
+          <option>自訂</option>
+        </select>
+        <input
+          type="text"
+          v-model="custom"
+          class="reason-custom"
+          v-if="description === '自訂'"
+        />
+      </div>
+
+      <div class="money">
+        <span class="money-title">增減</span>
+        <select v-model="upDown" class="money-selection">
+          <option>獲得</option>
+          <option>扣除</option>
+        </select>
+      </div>
+
+      <div class="money">
+        <span class="money-title">金額</span>
+        <select v-model="point" class="money-selection">
+          <option selected disabled>0</option>
+          <option>100</option>
+          <option>200</option>
+          <option>300</option>
+          <option>400</option>
+          <option>500</option>
+          <option>600</option>
+          <option>700</option>
+          <option>800</option>
+          <option>900</option>
+          <option>1000</option>
+          <option>1100</option>
+          <option>1200</option>
+          <option>1300</option>
+          <option>1400</option>
+          <option>1500</option>
+          <option>1600</option>
+          <option>1700</option>
+          <option>1800</option>
+          <option>1900</option>
+          <option>2000</option>
+        </select>
+      </div>
+      <div class="count">
+        <span class="count-title">數量</span>
+        <select v-model="count" class="count-selection">
+          <option selected>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+          <option>19</option>
+          <option>20</option>
+        </select>
+      </div>
+    </div>
+
+    <h3 class="content">
+      {{
+        description === "自訂"
+          ? custom
+          : description === ""
+          ? "未知原因"
+          : description
+      }}，{{ upDown }} {{ point }} 拉麵靈魂 => {{ count }} 份
+    </h3>
+
+    <button type="submit" @click="generate" class="submit-btn">
+      <p class="submit-content">產生 QRCode</p>
+    </button>
+  </template>
   <template v-else>
     <div
       v-if="staff_token == null"
@@ -180,6 +281,8 @@
         color: black;
         width: 5rem;
         margin: 0 auto;
+        font-weight: bold;
+        font-size: 1.2rem;
       "
     >
       Loading...
@@ -202,13 +305,11 @@ export default {
     QrcodeCapture,
     CoinTrendChart,
   },
-  computed: {
-    chartData() {
-      return; /* mutable chart data */
-    },
-    chartOptions() {
-      return; /* mutable chart options */
-    },
+  chartData() {
+    return; /* mutable chart data */
+  },
+  chartOptions() {
+    return; /* mutable chart options */
   },
   data() {
     return {
@@ -219,7 +320,8 @@ export default {
       description: "",
       upDown: "獲得",
       custom: "",
-      coupon: "",
+      coupon: [],
+      count: 1,
       status: [],
       lock: false,
       hasAlert: false,
@@ -273,14 +375,19 @@ export default {
     };
     this.api = axios.create(config);
 
-    if ((this.parameters().token || "").length !== 0) {
+    if (
+      (this.parameters().multi || "").length !== 0 &&
+      (this.parameters().token || "").length !== 0
+    ) {
+      this.mode = "multi";
+    } else if ((this.parameters().token || "").length !== 0) {
       this.mode = "admin";
     } else if ((this.parameters().id || "").length !== 0) {
       this.mode = "student";
       this.isAndroid = navigator.userAgent.match(/Android/i);
     } else if ((this.parameters().god || "").length !== 0) {
       this.mode = "god";
-      window.setInterval(
+      this.intervalHandler = window.setInterval(
         function () {
           this.getProblem();
         }.bind(this),
@@ -288,13 +395,17 @@ export default {
       );
     } else {
       this.mode = "dashboard";
-      window.setInterval(
+      this.intervalHandler = window.setInterval(
         function () {
           this.getStatus();
         }.bind(this),
         5000
       );
     }
+  },
+
+  beforeDestroy() {
+    window.clearInterval(this.intervalHandler);
   },
   computed: {
     desc: function () {
@@ -374,24 +485,64 @@ export default {
         });
     },
     generate() {
+      const qrcode = [];
       if ((this.parameters().token || "").length !== 0) {
-        this.api
-          .post(
-            "generate",
-            qs.stringify({
-              token: this.parameters().token,
-              coin: this.point * (this.upDown === "獲得" ? 1 : -1),
-              description: this.desc,
+        if (this.mode === "multi") {
+          for (let i = 0; i < this.count; i++) {
+            this.api
+              .post(
+                "generate",
+                qs.stringify({
+                  token: this.parameters().token,
+                  coin: this.point * (this.upDown === "獲得" ? 1 : -1),
+                  description: this.desc,
+                })
+              )
+              .then((res) => {
+                qrcode.push("https://quickchart.io/qr?text=" + res.data.coupon);
+                // console.log(
+                //   "QR Code URL: ",
+                //   "https://quickchart.io/qr?text=" + res.data.coupon
+                // );
+                if (i === this.count - 1) {
+                  this.coupon = qrcode;
+                  // console.log("Coupon Array: ", this.coupon);
+                  this.mode = "admin-finish";
+                }
+              })
+              .catch((error) => {
+                console.error("Error generating QR code:", error);
+              });
+          }
+        } else {
+          this.api
+            .post(
+              "generate",
+              qs.stringify({
+                token: this.parameters().token,
+                coin: this.point * (this.upDown === "獲得" ? 1 : -1),
+                description: this.desc,
+              })
+            )
+            .then((res) => {
+              qrcode.push("https://quickchart.io/qr?text=" + res.data.coupon);
+              // console.log(
+              //   "QR Code URL: ",
+              //   "https://quickchart.io/qr?text=" + res.data.coupon
+              // );
+              this.coupon = qrcode;
+              // console.log("Coupon Array: ", this.coupon);
+              this.mode = "admin-finish";
             })
-          )
-          .then((res) => {
-            this.mode = "admin-finish";
-            this.coupon = "https://quickchart.io/qr?text=" + res.data.coupon;
-          });
+            .catch((error) => {
+              console.error("Error generating QR code:", error);
+            });
+        }
       }
     },
     back() {
-      this.mode = "admin";
+      if (this.parameters().multi) this.mode = "multi";
+      else this.mode = "admin";
     },
     getStatus() {
       var self = this;
