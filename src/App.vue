@@ -284,7 +284,7 @@ export default {
         function () {
           this.getProblem();
         }.bind(this),
-        1000
+        5000
       );
     } else {
       this.mode = "dashboard";
@@ -292,7 +292,7 @@ export default {
         function () {
           this.getStatus();
         }.bind(this),
-        1000
+        5000
       );
     }
   },
