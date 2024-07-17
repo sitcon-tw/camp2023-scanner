@@ -136,8 +136,8 @@
             text-align: center;
             padding: 15px 30px;
             border-radius: 15px;
-            background-color: #77b55a;
-            color: white;
+            background-color: white;
+            color: black;
           "
         >
           <thead>
@@ -149,6 +149,7 @@
             <td>{{ item.coin }}</td>
           </tr>
         </table>
+        <CoinTrendChart />
       </div>
       <div
         v-else="staff_token == undefined || staff_token == ''"
@@ -157,8 +158,10 @@
           border: solid #69a14f 1px;
           border-radius: 5px;
           padding: 15px 30px;
-          background-color: #77b55a;
-          color: white;
+          background-color: white;
+          color: black;
+          width: 5rem;
+          margin: 0 auto;
         "
       >
         ⚠️ No permission.
@@ -173,8 +176,10 @@
         border: solid #69a14f 1px;
         border-radius: 5px;
         padding: 15px 30px;
-        background-color: #77b55a;
-        color: white;
+        background-color: white;
+        color: black;
+        width: 5rem;
+        margin: 0 auto;
       "
     >
       Loading...
@@ -187,12 +192,23 @@ import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import axios from "axios";
 import qs from "qs";
 
+import CoinTrendChart from "./components/CoinTrendChart.vue";
+
 export default {
   name: "app",
   components: {
     QrcodeStream,
     QrcodeDropZone,
     QrcodeCapture,
+    CoinTrendChart,
+  },
+  computed: {
+    chartData() {
+      return; /* mutable chart data */
+    },
+    chartOptions() {
+      return; /* mutable chart options */
+    },
   },
   data() {
     return {

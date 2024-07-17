@@ -9,13 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.4.0",
-    "qs": "^6.11.2",
-    "vue": "^3.3.4",
-    "vue-qrcode-reader": "^5.0.0"
+    "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "qs": "^6.12.3",
+    "vue": "^3.4.32",
+    "vue-chartjs": "^5.3.1",
+    "vue-qrcode-reader": "^5.5.7"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.3",
-    "vite": "^4.4.0"
+    "@vitejs/plugin-vue": "^4.6.2",
+    "vite": "^4.5.3"
   }
 }
