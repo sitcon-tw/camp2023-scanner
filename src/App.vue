@@ -54,14 +54,25 @@
         <span class="money-title">金額</span>
         <select v-model="point" class="money-selection">
           <option selected disabled>0</option>
-          <option>1</option>
-          <option>5</option>
-          <option>10</option>
-          <option>50</option>
           <option>100</option>
           <option>200</option>
+          <option>300</option>
+          <option>400</option>
           <option>500</option>
+          <option>600</option>
+          <option>700</option>
+          <option>800</option>
+          <option>900</option>
           <option>1000</option>
+          <option>1100</option>
+          <option>1200</option>
+          <option>1300</option>
+          <option>1400</option>
+          <option>1500</option>
+          <option>1600</option>
+          <option>1700</option>
+          <option>1800</option>
+          <option>1900</option>
           <option>2000</option>
         </select>
       </div>
@@ -353,7 +364,7 @@ export default {
             "generate",
             qs.stringify({
               token: this.parameters().token,
-              coin: this.point,
+              coin: this.point * (this.upDown === "獲得" ? 1 : -1),
               description: this.desc,
             })
           )
