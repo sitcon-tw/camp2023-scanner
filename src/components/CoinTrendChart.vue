@@ -1,19 +1,24 @@
 <template>
   <div class="main">
-    <canvas ref="coinTrendChart"></canvas>
+    <div class="chart-container">
+      <canvas ref="coinTrendChart"></canvas>
+    </div>
   </div>
 </template>
 
 <script>
 import { Chart, registerables } from "chart.js";
 import "chartjs-adapter-date-fns";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-Chart.register(...registerables);
+Chart.register(...registerables, ChartDataLabels);
 
 export default {
   name: "CoinTrendChart",
+  props: ["staff_token"],
   data() {
     return {
+      staffToken: this.staff_token,
       chart: null,
       teamColors: [
         "#FF0000", // 紅色
@@ -34,7 +39,7 @@ export default {
   methods: {
     fetchData() {
       fetch(
-        "https://camp-api.sitcon.party/consume_history?staff_token=bef65917ecd1f48794c5ab32521df52be2b0ed39"
+        `https://camp-api.sitcon.party/consume_history?staff_token=${this.staffToken}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -48,6 +53,10 @@ export default {
 
           // 分組並累積點數
           const groupedData = {};
+          const allTimestamps = new Set(
+            data.map((item) => item.consume_timestamp)
+          );
+
           data.forEach((item) => {
             if (!groupedData[item.team_name]) {
               groupedData[item.team_name] = [];
@@ -61,7 +70,32 @@ export default {
             groupedData[item.team_name].push({
               x: new Date(item.consume_timestamp * 1000),
               y: lastValue + item.coin,
+              reason: item.description,
+              points: item.coin,
             });
+          });
+
+          // 為每個小隊填充空白時間戳
+          Object.keys(groupedData).forEach((teamName) => {
+            let lastValue = 0;
+            const filledData = [];
+            allTimestamps.forEach((timestamp) => {
+              const existingPoint = groupedData[teamName].find(
+                (point) => point.x.getTime() === timestamp * 1000
+              );
+              if (existingPoint) {
+                lastValue = existingPoint.y;
+                filledData.push(existingPoint);
+              } else {
+                filledData.push({
+                  x: new Date(timestamp * 1000),
+                  y: lastValue,
+                  reason: "", // 空原因
+                  points: 0, // 0 點數
+                });
+              }
+            });
+            groupedData[teamName] = filledData;
           });
 
           this.renderChart(groupedData);
@@ -77,6 +111,14 @@ export default {
         stepped: true,
         borderColor: this.teamColors[index % this.teamColors.length],
         backgroundColor: this.teamColors[index % this.teamColors.length],
+        pointRadius: (context) => {
+          const point = context.raw;
+          return point.points > 0 ? 3 : 0; // 有點數的地方顯示點，否則隱藏點
+        },
+        pointHoverRadius: (context) => {
+          const point = context.raw;
+          return point.points > 0 ? 6 : 0; // 有點數的地方顯示點，否則隱藏點
+        },
       }));
 
       this.chart = new Chart(ctx, {
@@ -86,6 +128,7 @@ export default {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           scales: {
             x: {
               type: "time",
@@ -110,6 +153,17 @@ export default {
               display: true,
               text: "小隊點數累積趨勢圖",
             },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const point = context.raw;
+                  return `${context.dataset.label}: ${point.y}點 - ${point.reason} (${point.points}點)`;
+                },
+              },
+            },
+            datalabels: {
+              display: false, // 不顯示數據標籤
+            },
           },
         },
       });
@@ -124,8 +178,9 @@ export default {
 </script>
 
 <style scoped>
-canvas {
-  max-width: 100%;
+.chart-container {
+  position: relative;
+  width: 100%;
   height: 400px; /* 確保有高度 */
 }
 
@@ -134,5 +189,17 @@ canvas {
   background-color: white;
   border-radius: 1.5rem;
   padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px; /* 調整手機上的高度 */
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px; /* 調整小屏幕上的高度 */
+  }
 }
 </style>

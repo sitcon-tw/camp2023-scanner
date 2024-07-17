@@ -149,7 +149,7 @@
             <td>{{ item.coin }}</td>
           </tr>
         </table>
-        <CoinTrendChart />
+        <CoinTrendChart :staff_token="staff_token" />
       </div>
       <div
         v-else="staff_token == undefined || staff_token == ''"
@@ -160,7 +160,7 @@
           padding: 15px 30px;
           background-color: white;
           color: black;
-          width: 5rem;
+          width: 10rem;
           margin: 0 auto;
         "
       >
@@ -395,9 +395,9 @@ export default {
     },
     getStatus() {
       var self = this;
-      console.log(self.staff_token);
+      // console.log(self.staff_token);
       self.staff_token = this.parameters().staff_token;
-      console.log(self.staff_token);
+      // console.log(self.staff_token);
 
       this.api
         .get("status", {
