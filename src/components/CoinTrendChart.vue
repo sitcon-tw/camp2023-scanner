@@ -53,9 +53,6 @@ export default {
 
           // 分組並累積點數
           const groupedData = {};
-          const allTimestamps = new Set(
-            data.map((item) => item.consume_timestamp)
-          );
 
           data.forEach((item) => {
             if (!groupedData[item.team_name]) {
@@ -75,29 +72,7 @@ export default {
             });
           });
 
-          // 為每個小隊填充空白時間戳
-          Object.keys(groupedData).forEach((teamName) => {
-            let lastValue = 0;
-            const filledData = [];
-            allTimestamps.forEach((timestamp) => {
-              const existingPoint = groupedData[teamName].find(
-                (point) => point.x.getTime() === timestamp * 1000
-              );
-              if (existingPoint) {
-                lastValue = existingPoint.y;
-                filledData.push(existingPoint);
-              } else {
-                filledData.push({
-                  x: new Date(timestamp * 1000),
-                  y: lastValue,
-                  reason: "", // 空原因
-                  points: 0, // 0 點數
-                });
-              }
-            });
-            groupedData[teamName] = filledData;
-          });
-
+          // 不再填充空白時間戳
           this.renderChart(groupedData);
         })
         .catch((error) => console.error("Error:", error));
@@ -113,11 +88,11 @@ export default {
         backgroundColor: this.teamColors[index % this.teamColors.length],
         pointRadius: (context) => {
           const point = context.raw;
-          return point.points > 0 ? 3 : 0; // 有點數的地方顯示點，否則隱藏點
+          return point ? 3 : 0; // 只顯示有時間紀錄點的數據點
         },
         pointHoverRadius: (context) => {
           const point = context.raw;
-          return point.points > 0 ? 6 : 0; // 有點數的地方顯示點，否則隱藏點
+          return point ? 6 : 0; // 只顯示有時間紀錄點的數據點
         },
       }));
 
