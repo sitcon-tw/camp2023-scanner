@@ -387,7 +387,7 @@ export default {
       this.isAndroid = navigator.userAgent.match(/Android/i);
     } else if ((this.parameters().god || "").length !== 0) {
       this.mode = "god";
-      this.intervalHandler = window.setInterval(
+      this.intervalHandler = this.executeAndSetInterval(
         function () {
           this.getProblem();
         }.bind(this),
@@ -395,7 +395,7 @@ export default {
       );
     } else {
       this.mode = "dashboard";
-      this.intervalHandler = window.setInterval(
+      this.intervalHandler = this.executeAndSetInterval(
         function () {
           this.getStatus();
         }.bind(this),
@@ -577,6 +577,12 @@ export default {
       if (result.length !== 0) return result[0].name;
       else return "";
     },
+    executeAndSetInterval(callback, regularInterval) {
+      callback();
+      return setInterval(function () {
+        callback();
+      }, regularInterval);
+    }
   },
 };
 </script>
