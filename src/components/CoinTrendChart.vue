@@ -193,7 +193,7 @@ export default {
 .chart-container {
   position: relative;
   width: 100%;
-  height: 40px; /* 確保有高度 */
+  height: 400px; /* 確保有高度 */
 }
 
 .main {
