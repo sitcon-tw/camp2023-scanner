@@ -31,6 +31,17 @@ export default {
         "#000000", // 黑色
         "#808080", // 灰色
       ],
+      teamOrder: [
+        "第一小隊", // 紅色
+        "第二小隊", // 橙色
+        "第三小隊", // 黃色
+        "第四小隊", // 綠色
+        "第五小隊", // 藍色
+        "第六小隊", // 靛色
+        "第七小隊", // 紫色
+        "第八小隊", // 黑色
+        "第九小隊", // 灰色
+      ],
     };
   },
   mounted() {
@@ -103,22 +114,24 @@ export default {
     },
     renderChart(groupedData) {
       const ctx = this.$refs.coinTrendChart.getContext("2d");
-      const datasets = Object.keys(groupedData).map((teamName, index) => ({
-        label: teamName,
-        data: groupedData[teamName],
-        fill: false,
-        stepped: true,
-        borderColor: this.teamColors[index % this.teamColors.length],
-        backgroundColor: this.teamColors[index % this.teamColors.length],
-        pointRadius: (context) => {
-          const point = context.raw;
-          return point.points > 0 ? 3 : 0; // 有點數的地方顯示點，否則隱藏點
-        },
-        pointHoverRadius: (context) => {
-          const point = context.raw;
-          return point.points > 0 ? 6 : 0; // 有點數的地方顯示點，否則隱藏點
-        },
-      }));
+      const datasets = this.teamOrder
+        .filter(teamName => groupedData[teamName]) // 確保小隊存在於數據中
+        .map((teamName, index) => ({
+          label: teamName,
+          data: groupedData[teamName],
+          fill: false,
+          stepped: true,
+          borderColor: this.teamColors[index],
+          backgroundColor: this.teamColors[index],
+          pointRadius: (context) => {
+            const point = context.raw;
+            return point.points > 0 ? 3 : 0;
+          },
+          pointHoverRadius: (context) => {
+            const point = context.raw;
+            return point.points > 0 ? 6 : 0;
+          },
+        }));
 
       this.chart = new Chart(ctx, {
         type: "line",
