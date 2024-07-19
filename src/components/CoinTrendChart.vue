@@ -115,7 +115,7 @@ export default {
     renderChart(groupedData) {
       const ctx = this.$refs.coinTrendChart.getContext("2d");
       const datasets = this.teamOrder
-        .filter(teamName => groupedData[teamName]) // 確保小隊存在於數據中
+        .filter((teamName) => groupedData[teamName]) // 確保小隊存在於數據中
         .map((teamName, index) => ({
           label: teamName,
           data: groupedData[teamName],
@@ -125,11 +125,11 @@ export default {
           backgroundColor: this.teamColors[index],
           pointRadius: (context) => {
             const point = context.raw;
-            return point.points > 0 ? 3 : 0;
+            return point.reason !== "" ? 3 : 0;
           },
           pointHoverRadius: (context) => {
             const point = context.raw;
-            return point.points > 0 ? 6 : 0;
+            return point.reason !== "" ? 6 : 0;
           },
         }));
 
@@ -166,10 +166,16 @@ export default {
               text: "小隊點數累積趨勢圖",
             },
             tooltip: {
+              enabled: true,
               callbacks: {
                 label: function (context) {
                   const point = context.raw;
-                  return `${context.dataset.label}: ${point.y}點 - ${point.reason} (${point.points}點)`;
+                  // Check if 'reason' is not empty, then only return the label.
+                  if (point.reason !== "") {
+                    return `${context.dataset.label}: ${point.y}點 - ${point.reason} (${point.points}點)`;
+                  } else {
+                    return null; // Return null to prevent the tooltip from displaying
+                  }
                 },
               },
             },
