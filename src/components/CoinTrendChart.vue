@@ -23,7 +23,7 @@ export default {
       teamColors: [
         "#FF0000", // 紅色
         "#FFA500", // 橙色
-        "#FFFF00", // 黃色
+        "#CCCC00", // 黃色
         "#008000", // 綠色
         "#0000FF", // 藍色
         "#4B0082", // 靛色
@@ -193,7 +193,7 @@ export default {
 .chart-container {
   position: relative;
   width: 100%;
-  height: 400px; /* 確保有高度 */
+  height: 40px; /* 確保有高度 */
 }
 
 .main {
