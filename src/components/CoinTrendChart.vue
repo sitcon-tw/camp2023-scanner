@@ -125,11 +125,11 @@ export default {
           backgroundColor: this.teamColors[index],
           pointRadius: (context) => {
             const point = context.raw;
-            return point.points > 0 ? 3 : 0;
+            return point.points !== 0 ? 3 : 0;
           },
           pointHoverRadius: (context) => {
             const point = context.raw;
-            return point.points > 0 ? 6 : 0;
+            return point.points !== 0 ? 6 : 0;
           },
         }));
 
