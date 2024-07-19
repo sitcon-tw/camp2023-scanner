@@ -143,12 +143,18 @@
           "
         >
           <thead>
-            <th>組別</th>
-            <th>分數</th>
+            <th style="padding: 0 10px;">組別</th>
+            <th style="padding: 0 15px;">分數</th>
+            <th style="padding: 0 3px;">排名</th>
           </thead>
-          <tr v-for="item in status" :key="item['group_id']">
+          <tr v-for="item in group" :key="item.name">
             <td>{{ item.name }}</td>
-            <td>{{ item.coin }}</td>
+            <td>{{ rankStatus.find(s => s.name === item.name)?.coin || 0 }}</td>
+            <td>
+              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1" style="font-size: 15px; ">🥇</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2" style="font-size: 15px;">🥈</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3" style="font-size: 15px;">🥉</span>
+            </td>
           </tr>
         </table>
         <CoinTrendChart :staff_token="staff_token" />
@@ -433,6 +439,15 @@ export default {
       }
       return result;
     },
+    rankStatus: function() {
+      return this.group.map(g => {
+        const statusItem = this.status.find(s => s.name === g.name);
+        return {
+          name: g.name,
+          coin: statusItem ? statusItem.coin : 0
+        };
+      }).sort((a, b) => b.coin - a.coin);
+    },
   },
   methods: {
     OnSuccess(result) {
@@ -569,6 +584,8 @@ export default {
           self.problems = res.data;
         });
     },
+    getTeanRank(coin) {
+      return this.rankStatus.findIndex(item => item.coin == coin) + 1;},
     id2GroupName(id) {
       var result = this.group.filter(function (element) {
         return element.groupId === id;
