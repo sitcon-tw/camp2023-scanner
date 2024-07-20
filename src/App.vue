@@ -3,17 +3,14 @@
     <p style="text-align: center" v-if="isAndroid">
       如果使用 Android，請點擊上面三個點 開啟於...
     </p>
-    <p
-      style="
+    <p style="
         text-align: center;
         border: solid #69a14f 1px;
         border-radius: 5px;
         padding: 10px 5px;
         background-color: #77b55a;
         color: white;
-      "
-      v-if="hasAlert"
-    >
+      " v-if="hasAlert">
       {{ alertMsg }}
     </p>
     <QrcodeStream :onDetect="OnSuccess" />
@@ -34,12 +31,7 @@
           <option>無故鬧事</option>
           <option>自訂</option>
         </select>
-        <input
-          type="text"
-          v-model="custom"
-          class="reason-custom"
-          v-if="description === '自訂'"
-        />
+        <input type="text" v-model="custom" class="reason-custom" v-if="description === '自訂'" />
       </div>
 
       <div class="money">
@@ -82,8 +74,8 @@
         description === "自訂"
           ? custom
           : description === ""
-          ? "未知原因"
-          : description
+            ? "未知原因"
+            : description
       }}，{{ upDown }} {{ point }} 拉麵靈魂
     </h3>
 
@@ -132,16 +124,14 @@
   <template v-else-if="mode === 'score-finish'">
     <div>
       <div v-if="status.length > 0">
-        <table
-          style="
+        <table style="
             margin: 0 auto;
             text-align: center;
             padding: 15px 30px;
             border-radius: 15px;
             background-color: white;
             color: black;
-          "
-        >
+          ">
           <thead>
             <th style="padding: 0 10px;">組別</th>
             <th style="padding: 0 15px;">分數</th>
@@ -151,17 +141,24 @@
             <td>{{ item.name }}</td>
             <td>{{ rankStatus.find(s => s.name === item.name)?.coin || 0 }}</td>
             <td>
-              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1" style="font-size: 15px; ">🥇</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2" style="font-size: 15px;">🥈</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3" style="font-size: 15px;">🥉</span>
+              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1"
+                style="font-size: 15px; user-select: none; cursor: pointer" @click="explode">
+                <ConfettiExplosion v-for="(explosion) in explosions" :key="explosion"
+                  :stageHeight="explosion.stageHeight" :particleCount="explosion.particleCount"
+                  :duration="explosion.duration" :endCallback="() => removeExplosion(explosion)"
+                  style="position: fixed;" />
+                🥇
+              </span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2"
+                style="font-size: 15px; user-select: none; cursor: pointer">🥈</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3"
+                style="font-size: 15px; user-select: none; cursor: pointer">🥉</span>
             </td>
           </tr>
         </table>
         <CoinTrendChart :staff_token="staff_token" />
       </div>
-      <div
-        v-else
-        style="
+      <div v-else style="
           text-align: center;
           border: solid #69a14f 1px;
           border-radius: 5px;
@@ -170,8 +167,7 @@
           color: black;
           width: 10rem;
           margin: 0 auto;
-        "
-      >
+        ">
         ⚠️ No permission.
       </div>
     </div>
@@ -192,12 +188,7 @@
           <option>無故鬧事</option>
           <option>自訂</option>
         </select>
-        <input
-          type="text"
-          v-model="custom"
-          class="reason-custom"
-          v-if="description === '自訂'"
-        />
+        <input type="text" v-model="custom" class="reason-custom" v-if="description === '自訂'" />
       </div>
 
       <div class="money">
@@ -266,8 +257,8 @@
         description === "自訂"
           ? custom
           : description === ""
-          ? "未知原因"
-          : description
+            ? "未知原因"
+            : description
       }}，{{ upDown }} {{ point }} 拉麵靈魂 => {{ count }} 份
     </h3>
 
@@ -276,9 +267,7 @@
     </button>
   </template>
   <template v-else>
-    <div
-      v-if="staff_token == null"
-      style="
+    <div v-if="staff_token == null" style="
         text-align: center;
         border: solid #69a14f 1px;
         border-radius: 5px;
@@ -289,8 +278,7 @@
         margin: 0 auto;
         font-weight: bold;
         font-size: 1.2rem;
-      "
-    >
+      ">
       Loading...
     </div>
   </template>
@@ -300,6 +288,7 @@
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import axios from "axios";
 import qs from "qs";
+import ConfettiExplosion from "vue-confetti-explosion";
 
 import CoinTrendChart from "./components/CoinTrendChart.vue";
 
@@ -310,6 +299,9 @@ export default {
     QrcodeDropZone,
     QrcodeCapture,
     CoinTrendChart,
+    ConfettiExplosion,
+  },
+  setup() {
   },
   chartData() {
     return; /* mutable chart data */
@@ -372,7 +364,10 @@ export default {
         },
       ],
       problems: [],
+      explosions: [],
     };
+  },
+  onMount() {
   },
   beforeMount() {
     var config = {
@@ -409,7 +404,6 @@ export default {
       );
     }
   },
-
   beforeDestroy() {
     window.clearInterval(this.intervalHandler);
   },
@@ -439,7 +433,7 @@ export default {
       }
       return result;
     },
-    rankStatus: function() {
+    rankStatus: function () {
       return this.group.map(g => {
         const statusItem = this.status.find(s => s.name === g.name);
         return {
@@ -450,6 +444,19 @@ export default {
     },
   },
   methods: {
+    explode(element) {
+      const distanceFromTop = window.scrollY + element.target.getBoundingClientRect().top;
+      const screenHeight = window.innerHeight;
+      const stageHeight = screenHeight - distanceFromTop + 100;
+      this.explosions.push({
+        stageHeight,
+        particleCount: 90,
+        duration: 3000,
+      });
+    },
+    removeExplosion(index) {
+      this.explosions.splice(index, 1);
+    },
     OnSuccess(result) {
       result = result[0].rawValue;
       if (result.startsWith("http")) window.location.href = result;
@@ -585,7 +592,8 @@ export default {
         });
     },
     getTeanRank(coin) {
-      return this.rankStatus.findIndex(item => item.coin == coin) + 1;},
+      return this.rankStatus.findIndex(item => item.coin == coin) + 1;
+    },
     id2GroupName(id) {
       var result = this.group.filter(function (element) {
         return element.groupId === id;
