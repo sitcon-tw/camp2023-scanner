@@ -196,7 +196,7 @@ export default {
             zoom: {
               zoom: {
                 wheel: { enabled: true },
-                pinch: { enabled: false },
+                pinch: { enabled: true },
                 mode: 'x',
                 drag: {
                   enabled: true,
