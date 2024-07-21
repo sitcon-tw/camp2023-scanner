@@ -27,7 +27,7 @@ export default {
             showOverlay: false,
             showFireworks: false,
             showCongratulations: false,
-            audioSrc: [ '/src/audio/no1.mp3', '/src/audio/no2-3_audio.mp3' ],
+            audioSrc: '/src/audio/no2-3_audio.mp3',
             audioType: 'audio/mpeg',
             ranktext: "",
             // 閉幕式-煙火選項
@@ -104,14 +104,7 @@ export default {
 
                     setTimeout(() => {
                         this.showCongratulations = true;
-                    }, 1000);
-                    // 5秒後停止煙火
-                    setTimeout(() => {
-                        fireworks.stop();
-                        this.showfireworks = false;
-                        this.showOverlay = false;
-                        this.showCongratulations = false;
-                    }, 10000);
+                    }, 400);
                 }
             });
         },
