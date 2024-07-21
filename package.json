@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fireworks-js/vue": "^2.10.8",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "chartjs-adapter-date-fns": "^3.0.0",

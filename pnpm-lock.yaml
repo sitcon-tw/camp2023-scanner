@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fireworks-js/vue':
+    specifier: ^2.10.8
+    version: 2.10.8(vue@3.4.32)
   axios:
     specifier: ^1.7.2
     version: 1.7.2
@@ -267,6 +270,15 @@ packages:
     dev: true
     optional: true
 
+  /@fireworks-js/vue@2.10.8(vue@3.4.32):
+    resolution: {integrity: sha512-XcLfgSO5OHxV6ffn3T3KC0vgJa1in3oLB/Laqzfgc3OBtx2bpwsfbayZNNiQdscRijl1yxHTC0fqe0q83m/dzg==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      fireworks-js: 2.10.8
+      vue: 3.4.32
+    dev: false
+
   /@jridgewell/sourcemap-codec@1.5.0:
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
@@ -510,6 +522,10 @@ packages:
 
   /estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+
+  /fireworks-js@2.10.8:
+    resolution: {integrity: sha512-UZNxeJvRmQzLisN4iriWXqKojG9TDJqc0dPmkUw0/+AEQQ3w8z1Jx2YdFSiBGSVb/u4dPTQXU109GMVblzhfpg==}
+    dev: false
 
   /follow-redirects@1.15.6:
     resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}

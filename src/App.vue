@@ -151,12 +151,13 @@
             <td>{{ item.name }}</td>
             <td>{{ rankStatus.find(s => s.name === item.name)?.coin || 0 }}</td>
             <td>
-              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1" style="font-size: 15px; ">🥇</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2" style="font-size: 15px;">🥈</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3" style="font-size: 15px;">🥉</span>
+              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1" style="font-size: 15px;" @click="callFireworks('第一名')">🥇</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2" style="font-size: 15px;" @click="callFireworks('第二名')">🥈</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3" style="font-size: 15px;" @click="callFireworks('第三名')">🥉</span>
             </td>
           </tr>
         </table>
+        <FireworksModal ref="fireworksModal" />
         <CoinTrendChart :staff_token="staff_token" />
       </div>
       <div
@@ -302,6 +303,7 @@ import axios from "axios";
 import qs from "qs";
 
 import CoinTrendChart from "./components/CoinTrendChart.vue";
+import FireworksModal from "./components/FireworkModal.vue";
 
 export default {
   name: "app",
@@ -310,6 +312,7 @@ export default {
     QrcodeDropZone,
     QrcodeCapture,
     CoinTrendChart,
+    FireworksModal,
   },
   chartData() {
     return; /* mutable chart data */
@@ -371,9 +374,10 @@ export default {
           name: "第九小隊",
         },
       ],
-      problems: [],
-    };
+      problems: [], 
+    }
   },
+
   beforeMount() {
     var config = {
       baseURL: "https://camp-api.sitcon.party/",
@@ -448,7 +452,12 @@ export default {
         };
       }).sort((a, b) => b.coin - a.coin);
     },
+
+    fireworks() {
+      return this.$refs.fireworks;
+    },
   },
+
   methods: {
     OnSuccess(result) {
       result = result[0].rawValue;
@@ -599,7 +608,10 @@ export default {
       return setInterval(function () {
         callback();
       }, regularInterval);
-    }
+    },
+    callFireworks(ranktext) {
+      this.$refs.fireworksModal.startFireworks(ranktext);
+    },
   },
 };
 </script>
@@ -632,5 +644,5 @@ export default {
     height: 100%;
     object-fit: cover;
   }
-}
+}  
 </style>
