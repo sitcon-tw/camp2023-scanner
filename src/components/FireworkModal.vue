@@ -1,18 +1,19 @@
 <template>
-    <div>
-        <div v-if="showOverlay" class="overlay"></div>
-        <Fireworks v-show="showFireworks" ref="fireworks" :options="fireworksOptions" :style="fireworksStyle" />
-        <audio ref="audioElement">
-        <source :src="audioSrc" :type="audioType">這個瀏覽器不支持音頻</audio>
-        <div v-if="showCongratulations" class="congratulations-modal">
-            <div class="logo-container">
-                <img src="/src/images/xiaostore.png" class="logo">
-            </div>
-            <h2>拉麵靈魂點數</h2>
-            <p>哦耶~恭喜你們ww {{ ranktext }}</p>
-            <button @click="closeCongratulations">關閉</button>
-        </div>
+  <div>
+    <div v-if="showOverlay" class="overlay"></div>
+    <Fireworks v-show="showFireworks" ref="fireworks" :options="fireworksOptions" :style="fireworksStyle" />
+    <audio ref="audioElement">
+      <source :src="audioSrc" :type="audioType">這個瀏覽器不支持音頻
+    </audio>
+    <div v-if="showCongratulations" class="congratulations-modal">
+      <div class="logo-container">
+        <img src="/src/images/xiaostore.png" class="logo">
+      </div>
+      <h2>拉麵靈魂點數</h2>
+      <p>哦耶~恭喜你們ww {{ ranktext }}</p>
+      <button @click="closeCongratulations">關閉</button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -116,63 +117,69 @@ export default {
                 this.$refs.fireworks.stop();
             }
         },
+        closeCongratulations() {
+            this.showCongratulations = false;
+            this.showOverlay = false;
+            this.showfireworks = false;
+            if (this.$refs.fireworks) {
+                this.$refs.fireworks.stop();
+            }
+        },
     },
 };
-
 </script>
 
 <style>
-    .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-  }
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
 
-  .congratulations-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    z-index: 1001;
-    text-align: center;
-  }
+.congratulations-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+  text-align: center;
+}
 
-  .congratulations-modal h2 {
-    margin-top: 0;
-  }
+.congratulations-modal h2 {
+  margin-top: 0;
+}
 
-  .congratulations-modal button {
-    margin-top: 10px;
-    padding: 10px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.congratulations-modal button {
+  margin-top: 10px;
+  padding: 10px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .congratulations-modal button:hover {
-    background-color: #45a049;
-  }
+.congratulations-modal button:hover {
+  background-color: #45a049;
+}
 
-  .logo-container {
-    display: auto;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+.logo-container {
+  display: auto;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  .logo {
-    width: 80px;
-    height: auto;
-    transform: rotate(-15deg);
-  }
-
+.logo {
+  width: 80px;
+  height: auto;
+  transform: rotate(-15deg);
+}
 </style>

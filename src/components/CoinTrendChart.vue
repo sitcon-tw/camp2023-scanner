@@ -68,61 +68,61 @@ export default {
           this.renderChart(groupedData);
         })
         .catch(error => console.error("Error:", error));
-    },    
-
-    processData(data) { 
-       // 按時間戳排序
-       data.sort((a, b) => a.consume_timestamp - b.consume_timestamp);
-      
-       const groupedData = {};
-       const allTimestamps = new Set(
-            data.map((item) => item.consume_timestamp)
-          );
-
-          data.forEach((item) => {
-            if (!groupedData[item.team_name]) {
-              groupedData[item.team_name] = [];
-            }
-            const lastValue =
-              groupedData[item.team_name].length > 0
-                ? groupedData[item.team_name][
-                    groupedData[item.team_name].length - 1
-                  ].y
-                : 0;
-            groupedData[item.team_name].push({
-              x: new Date(item.consume_timestamp * 1000),
-              y: lastValue + item.coin,
-              reason: item.description,
-              points: item.coin,
-            });
-          });
-
-          // 為每個小隊填充空白時間戳
-          Object.keys(groupedData).forEach((teamName) => {
-            let lastValue = 0;
-            const filledData = [];
-            allTimestamps.forEach((timestamp) => {
-              const existingPoint = groupedData[teamName].find(
-                (point) => point.x.getTime() === timestamp * 1000
-              );
-              if (existingPoint) {
-                lastValue = existingPoint.y;
-                filledData.push(existingPoint);
-              } else {
-                filledData.push({
-                  x: new Date(timestamp * 1000),
-                  y: lastValue,
-                  reason: "", // 空原因
-                  points: 0, // 0 點數
-                });
-              }
-            });
-            groupedData[teamName] = filledData;
-          });
-
-          return groupedData;
     },
-          
+
+    processData(data) {
+      // 按時間戳排序
+      data.sort((a, b) => a.consume_timestamp - b.consume_timestamp);
+
+      const groupedData = {};
+      const allTimestamps = new Set(
+        data.map((item) => item.consume_timestamp)
+      );
+
+      data.forEach((item) => {
+        if (!groupedData[item.team_name]) {
+          groupedData[item.team_name] = [];
+        }
+        const lastValue =
+          groupedData[item.team_name].length > 0
+            ? groupedData[item.team_name][
+              groupedData[item.team_name].length - 1
+            ].y
+            : 0;
+        groupedData[item.team_name].push({
+          x: new Date(item.consume_timestamp * 1000),
+          y: lastValue + item.coin,
+          reason: item.description,
+          points: item.coin,
+        });
+      });
+
+      // 為每個小隊填充空白時間戳
+      Object.keys(groupedData).forEach((teamName) => {
+        let lastValue = 0;
+        const filledData = [];
+        allTimestamps.forEach((timestamp) => {
+          const existingPoint = groupedData[teamName].find(
+            (point) => point.x.getTime() === timestamp * 1000
+          );
+          if (existingPoint) {
+            lastValue = existingPoint.y;
+            filledData.push(existingPoint);
+          } else {
+            filledData.push({
+              x: new Date(timestamp * 1000),
+              y: lastValue,
+              reason: "", // 空原因
+              points: 0, // 0 點數
+            });
+          }
+        });
+        groupedData[teamName] = filledData;
+      });
+
+      return groupedData;
+    },
+
     renderChart(groupedData) {
       const ctx = this.$refs.coinTrendChart.getContext("2d");
       const datasets = this.teamOrder
@@ -211,7 +211,7 @@ export default {
                 mode: 'x'
               },
               limits: {
-                x: {min: 'original', max: 'original'}
+                x: { min: 'original', max: 'original' }
               }
             }
           },
@@ -241,7 +241,8 @@ export default {
 .chart-container {
   position: relative;
   width: 100%;
-  height: 400px; /* 確保有高度 */
+  height: 400px;
+  /* 確保有高度 */
 }
 
 .main {
@@ -276,7 +277,8 @@ export default {
 
 @media (max-width: 768px) {
   .chart-container {
-    height: 300px; /* 調整手機上的高度 */
+    height: 300px;
+    /* 調整手機上的高度 */
   }
 
   .reset-chart-button {
@@ -287,7 +289,8 @@ export default {
 
 @media (max-width: 480px) {
   .chart-container {
-    height: 250px; /* 調整小屏幕上的高度 */
+    height: 250px;
+    /* 調整小屏幕上的高度 */
   }
 
   .reset-chart-button {
