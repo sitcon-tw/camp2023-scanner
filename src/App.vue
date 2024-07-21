@@ -137,13 +137,16 @@
             <th style="padding: 0 15px;">分數</th>
             <th style="padding: 0 3px;">排名</th>
           </thead>
-          <tr v-for="item in group" :key="item.name">
+          <tr v-for="item in group" :key="item.name" class="table-row">
             <td>{{ item.name }}</td>
             <td>{{ rankStatus.find(s => s.name === item.name)?.coin || 0 }}</td>
             <td>
-              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1" style="font-size: 15px;" @click="callFireworks('第一名')">🥇</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2" style="font-size: 15px;" @click="callFireworks('第二名')">🥈</span>
-              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3" style="font-size: 15px;" @click="callFireworks('第三名')">🥉</span>
+              <span v-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 1"
+                style="font-size: 16px; user-select: none; cursor: pointer;" @click="callFireworks('第一名')">🥇</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 2"
+                style="font-size: 16px; user-select: none; cursor: pointer;" @click="callFireworks('第二名')">🥈</span>
+              <span v-else-if="getTeanRank(rankStatus.find(s => s.name === item.name)?.coin || 0) === 3"
+                style="font-size: 16px; user-select: none; cursor: pointer;" @click="callFireworks('第三名')">🥉</span>
             </td>
           </tr>
         </table>
@@ -280,7 +283,6 @@
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import axios from "axios";
 import qs from "qs";
-import ConfettiExplosion from "vue-confetti-explosion";
 
 import CoinTrendChart from "./components/CoinTrendChart.vue";
 import FireworksModal from "./components/FireworkModal.vue";
@@ -354,7 +356,7 @@ export default {
           name: "第九小隊",
         },
       ],
-      problems: [], 
+      problems: [],
     }
   },
 
@@ -637,5 +639,5 @@ export default {
     height: 100%;
     object-fit: cover;
   }
-}  
+}
 </style>

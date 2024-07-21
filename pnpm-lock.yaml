@@ -4,45 +4,53 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  axios:
-    specifier: ^1.7.2
-    version: 1.7.2
-  chart.js:
-    specifier: ^4.4.3
-    version: 4.4.3
-  chartjs-adapter-date-fns:
-    specifier: ^3.0.0
-    version: 3.0.0(chart.js@4.4.3)(date-fns@3.6.0)
-  chartjs-adapter-moment:
-    specifier: ^1.0.1
-    version: 1.0.1(chart.js@4.4.3)(moment@2.30.1)
-  chartjs-plugin-datalabels:
-    specifier: ^2.2.0
-    version: 2.2.0(chart.js@4.4.3)
-  chartjs-plugin-zoom:
-    specifier: ^2.0.1
-    version: 2.0.1(chart.js@4.4.3)
-  qs:
-    specifier: ^6.12.3
-    version: 6.12.3
-  vue:
-    specifier: ^3.4.32
-    version: 3.4.32
-  vue-chartjs:
-    specifier: ^5.3.1
-    version: 5.3.1(chart.js@4.4.3)(vue@3.4.32)
-  vue-qrcode-reader:
-    specifier: ^5.5.7
-    version: 5.5.7
+importers:
 
-devDependencies:
-  '@vitejs/plugin-vue':
-    specifier: ^4.6.2
-    version: 4.6.2(vite@4.5.3)(vue@3.4.32)
-  vite:
-    specifier: ^4.5.3
-    version: 4.5.3
+  .:
+    dependencies:
+      '@fireworks-js/vue':
+        specifier: ^2.10.8
+        version: 2.10.8(vue@3.4.32)
+      axios:
+        specifier: ^1.7.2
+        version: 1.7.2
+      chart.js:
+        specifier: ^4.4.3
+        version: 4.4.3
+      chartjs-adapter-date-fns:
+        specifier: ^3.0.0
+        version: 3.0.0(chart.js@4.4.3)(date-fns@3.6.0)
+      chartjs-adapter-moment:
+        specifier: ^1.0.1
+        version: 1.0.1(chart.js@4.4.3)(moment@2.30.1)
+      chartjs-plugin-datalabels:
+        specifier: ^2.2.0
+        version: 2.2.0(chart.js@4.4.3)
+      chartjs-plugin-zoom:
+        specifier: ^2.0.1
+        version: 2.0.1(chart.js@4.4.3)
+      qs:
+        specifier: ^6.12.3
+        version: 6.12.3
+      vue:
+        specifier: ^3.4.32
+        version: 3.4.32
+      vue-chartjs:
+        specifier: ^5.3.1
+        version: 5.3.1(chart.js@4.4.3)(vue@3.4.32)
+      vue-confetti-explosion:
+        specifier: ^1.0.2
+        version: 1.0.2(vue@3.4.32)
+      vue-qrcode-reader:
+        specifier: ^5.5.7
+        version: 5.5.7
+    devDependencies:
+      '@vitejs/plugin-vue':
+        specifier: ^4.6.2
+        version: 4.6.2(vite@4.5.3)(vue@3.4.32)
+      vite:
+        specifier: ^4.5.3
+        version: 4.5.3
 
 packages:
 
@@ -195,7 +203,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  /@jridgewell/sourcemap-codec@1.5.0:
+  '@fireworks-js/vue@2.10.8':
+    resolution: {integrity: sha512-XcLfgSO5OHxV6ffn3T3KC0vgJa1in3oLB/Laqzfgc3OBtx2bpwsfbayZNNiQdscRijl1yxHTC0fqe0q83m/dzg==}
+    peerDependencies:
+      vue: '>=3.0.0'
+
+  '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
   '@kurkle/color@0.3.2':
@@ -319,6 +332,9 @@ packages:
 
   estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+
+  fireworks-js@2.10.8:
+    resolution: {integrity: sha512-UZNxeJvRmQzLisN4iriWXqKojG9TDJqc0dPmkUw0/+AEQQ3w8z1Jx2YdFSiBGSVb/u4dPTQXU109GMVblzhfpg==}
 
   follow-redirects@1.15.6:
     resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
@@ -569,6 +585,11 @@ snapshots:
   '@esbuild/win32-x64@0.18.20':
     optional: true
 
+  '@fireworks-js/vue@2.10.8(vue@3.4.32)':
+    dependencies:
+      fireworks-js: 2.10.8
+      vue: 3.4.32
+
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
   '@kurkle/color@0.3.2': {}
@@ -733,19 +754,11 @@ snapshots:
 
   estree-walker@2.0.2: {}
 
-  /follow-redirects@1.15.6:
-    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: false
+  fireworks-js@2.10.8: {}
 
-  /form-data@4.0.0:
-    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
-    engines: {node: '>= 6'}
+  follow-redirects@1.15.6: {}
+
+  form-data@4.0.0:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
