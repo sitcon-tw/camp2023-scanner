@@ -28,7 +28,7 @@ export default {
             showOverlay: false,
             showFireworks: false,
             showCongratulations: false,
-            audioSrc: '../src/audio/no2-3_audio.mp3',
+            audioSrc: './src/audio/no2-3_audio.mp3',
             audioType: 'audio/mpeg',
             ranktext: "",
             // 閉幕式-煙火選項
